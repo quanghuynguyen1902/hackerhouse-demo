@@ -5,22 +5,19 @@ import (
 	"github.com/consolelabs/hackerhouse-demo/pkg/config"
 	"github.com/consolelabs/hackerhouse-demo/pkg/logger"
 	"github.com/consolelabs/hackerhouse-demo/pkg/service"
-	"github.com/consolelabs/hackerhouse-demo/pkg/store"
 	_ "github.com/lib/pq"
 )
 
 func main() {
 	cfg := config.LoadConfig(config.DefaultConfigLoaders())
 	l := logger.NewLogrusLogger()
-	store := store.New(cfg)
 
-	svc := service.New(cfg, l, store)
+	svc := service.New(cfg, l)
 	// y00t collection
-	mintList, err := svc.Helius.GetMintList("A4FM6h8T5Fmh9z2g3fKUrKfZn6BNFEgByR8QGpdbQhk1")
+	mintList, err := svc.Helius.GetNftFromTransaction("5SiXMSK9E4SwAZt7XawCdg1yRa6og5VBnyZnZYnkErrCbCbbdv5hGkKXGUFex59nNqLHrfA4q61JvEDdYeP8gkgU")
 	if err != nil {
 	}
-
-	nftToken, err := svc.Mochi.GetNftDetail(mintList[0])
-	fmt.Println(nftToken)
+	fmt.Println(mintList)
+	//
 
 }

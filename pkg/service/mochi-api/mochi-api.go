@@ -3,34 +3,29 @@ package mochi_api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/consolelabs/hackerhouse-demo/pkg/model"
+	"github.com/consolelabs/hackerhouse-demo/pkg/config"
+	"github.com/consolelabs/hackerhouse-demo/pkg/logger"
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	"github.com/consolelabs/hackerhouse-demo/pkg/config"
-	"github.com/consolelabs/hackerhouse-demo/pkg/logger"
-	"github.com/consolelabs/hackerhouse-demo/pkg/store"
 )
 
 type mochiService struct {
 	config *config.Config
 	logger logger.Logger
-	store  *store.Store
 }
 
-func New(cfg *config.Config, l logger.Logger, store *store.Store) IService {
+func New(cfg *config.Config, l logger.Logger) IService {
 	return &mochiService{
 		config: cfg,
 		logger: l,
-		store:  store,
 	}
 }
 
-func (m *mochiService) GetNftDetail(mintData model.MintData) (interface{}, error) {
+func (m *mochiService) GetNftDetail(name string) (interface{}, error) {
 	tokenId := ""
-	if strings.Contains(mintData.Name, "#") {
-		tokenId = strings.Split(mintData.Name, "#")[1]
+	if strings.Contains(name, "#") {
+		tokenId = strings.Split(name, "#")[1]
 	}
 	nftToken, err := m.fetchNftDetail(tokenId)
 	if err != nil {
